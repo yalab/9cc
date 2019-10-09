@@ -9,5 +9,5 @@ run: all
 	./$(bin); echo $$?
 
 objdump: build
-	objdump -d ./$(bin)
+	objdump -d -M intel ./$(bin)
 
