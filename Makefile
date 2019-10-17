@@ -9,6 +9,6 @@ test: 9cc
 	./test.sh
 
 clean:
-	rm -f 9cc *.o *.s [0-9]
+	rm -f 9cc *.o *.s [0-9] tmp
 
 .PHONY: test clean
