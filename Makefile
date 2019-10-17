@@ -1,13 +1,14 @@
+CFLAGS = -std=c11 -g -static
 CC = gcc
 
 bin = test1
 
-build:
-	$(CC) -o $(bin) test1.c
+9cc: 9cc.c
 
-run: all
-	./$(bin); echo $$?
+test: 9cc
+	./test.sh
 
-objdump: build
-	objdump -d -M intel ./$(bin)
+clean:
+	rm -f 9cc *.o *.s [0-9]
 
+.PHONY: test clean
