@@ -3,11 +3,11 @@
 try() {
     EXPECTED="$1"
     INPUT="$2"
-    ASM="${INPUT}.s"
+    ASM="tmp.s"
     ./9cc "$INPUT" > "$ASM"
-    gcc -o $INPUT "$ASM"
+    gcc -o tmp "$ASM"
 
-    ./$INPUT
+    ./tmp
     ACTUAL="$?"
     if [ "$ACTUAL" = "$EXPECTED" ];then
         echo "$INPUT => $ACTUAL"
@@ -17,6 +17,5 @@ try() {
     fi
 }
 
-try 0 0
-try 9 9
+try 139 "99 + 213 - 173"
 echo "OK"
