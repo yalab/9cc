@@ -54,19 +54,25 @@ void error_at(char *loc, char *fmt, ...) {
   exit(1);
 }
 
+bool is_symbol(char op) {
+	return token->kind == TK_RESERVED && token->str[0] == op;
+}
+
 bool consume(char op) {
-	if (token->kind != TK_RESERVED || token->str[0] != op) {
+	if (is_symbol(op)) {
+		token = token->next;
+		return true;
+	} else {
 		return false;
 	}
-	token = token->next;
-	return true;
 }
 
 void expect(char op) {
-	if (token->kind != TK_RESERVED || token->str[0] != op) {
+	if (is_symbol(op)) {
+		token = token->next;
+	} else {
 		error_at(token->str, "'%c'ではありません", op);
 	}
-	token = token->next;
 }
 
 int expect_number() {
