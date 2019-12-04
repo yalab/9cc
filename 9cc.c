@@ -18,6 +18,7 @@ struct Token {
 	Token* next;
 	int val;
 	char *str;
+	int len;
 };
 
 Token *token;
@@ -54,11 +55,11 @@ void error_at(char *loc, char *fmt, ...) {
   exit(1);
 }
 
-bool is_symbol(char op) {
-	return token->kind == TK_RESERVED && token->str[0] == op;
+bool is_symbol(char *op) {
+	return token->kind == TK_RESERVED && (int)strlen(op) == token->len && !memcmp(token->str, op, token->len);
 }
 
-bool consume(char op) {
+bool consume(char *op) {
 	if (is_symbol(op)) {
 		token = token->next;
 		return true;
@@ -67,7 +68,7 @@ bool consume(char op) {
 	}
 }
 
-void expect(char op) {
+void expect(char *op) {
 	if (is_symbol(op)) {
 		token = token->next;
 	} else {
@@ -92,6 +93,7 @@ Token *new_token(TokenKind kind, Token *cur, char* str) {
 	Token *tok = calloc(1, sizeof(Token));
 	tok->kind = kind;
 	tok->str = str;
+	tok->len = 1;
 	cur->next = tok;
 	return tok;
 }
@@ -148,9 +150,9 @@ Node *unary();
 Node *expr() {
 	Node* node = mul();
 	for(;;) {
-		if (consume('+')) {
+		if (consume("+")) {
 			node = new_node(ND_ADD, node, mul());
-		} else if (consume('-')) {
+		} else if (consume("-")) {
 			node = new_node(ND_SUB, node, mul());
 		} else {
 			return node;
@@ -162,9 +164,9 @@ Node *mul() {
 	Node *node = unary();
 
 	for (;;) {
-		if (consume('*')) {
+		if (consume("*")) {
 			node = new_node(ND_MUL, node, unary());
-		} else if (consume('/')) {
+		} else if (consume("/")) {
 			node = new_node(ND_DIV, node, unary());
 		} else {
 			return node;
@@ -173,9 +175,9 @@ Node *mul() {
 }
 
 Node *primary() {
-	if (consume('(')) {
+	if (consume("(")) {
 		Node *node = expr();
-		expect(')');
+		expect(")");
 		return node;
 	}
 
@@ -183,10 +185,10 @@ Node *primary() {
 }
 
 Node *unary() {
-	if (consume('+')) {
-		return primary();
+	if (consume("+")) {
+		return new_node(ND_ADD, new_node_num(0), primary());
 	}
-	if (consume('-')) {
+	if (consume("-")) {
 		return new_node(ND_SUB, new_node_num(0), primary());
 	}
 	return primary();
