@@ -1,6 +1,6 @@
 version: '3'
 services:
-  make:
+  9cc:
     build: .
     tty: true
     stdin_open: true    
