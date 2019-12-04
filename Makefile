@@ -12,3 +12,6 @@ clean:
 	rm -f 9cc *.o *.s [0-9] tmp
 
 .PHONY: test clean
+
+run-t:
+	gcc -o t t.c && ./t
