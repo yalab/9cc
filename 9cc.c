@@ -144,8 +144,8 @@ Node *new_node_num(int val) {
 
 Node *expr();
 Node *mul();
-Node *primary();
 Node *unary();
+Node *primary();
 
 Node *expr() {
 	Node* node = mul();
@@ -174,16 +174,6 @@ Node *mul() {
 	}
 }
 
-Node *primary() {
-	if (consume("(")) {
-		Node *node = expr();
-		expect(")");
-		return node;
-	}
-
-	return new_node_num(expect_number());
-}
-
 Node *unary() {
 	if (consume("+")) {
 		return new_node(ND_ADD, new_node_num(0), primary());
@@ -192,6 +182,16 @@ Node *unary() {
 		return new_node(ND_SUB, new_node_num(0), primary());
 	}
 	return primary();
+}
+
+Node *primary() {
+	if (consume("(")) {
+		Node *node = expr();
+		expect(")");
+		return node;
+	}
+
+	return new_node_num(expect_number());
 }
 
 void gen(Node *node) {
