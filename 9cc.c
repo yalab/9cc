@@ -143,11 +143,16 @@ Node *new_node_num(int val) {
 }
 
 Node *expr();
+Node *add();
 Node *mul();
 Node *unary();
 Node *primary();
 
 Node *expr() {
+    return add();
+}
+
+Node *add() {
   Node* node = mul();
   for(;;) {
     if (consume("+")) {
