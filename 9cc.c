@@ -89,11 +89,11 @@ bool at_eof() {
   return token->kind == TK_EOF;
 }
 
-Token *new_token(TokenKind kind, Token *cur, char* str) {
+Token *new_token(TokenKind kind, Token *cur, char* str, int len) {
   Token *tok = calloc(1, sizeof(Token));
   tok->kind = kind;
   tok->str = str;
-  tok->len = 1;
+  tok->len = len;
   cur->next = tok;
   return tok;
 }
@@ -111,19 +111,19 @@ Token *tokenize() {
     }
 
     if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' || *p == ')') {
-      cur = new_token(TK_RESERVED, cur, p++);
+      cur = new_token(TK_RESERVED, cur, p++, 1);
       continue;
     }
 
     if (isdigit(*p)) {
-      cur = new_token(TK_NUM, cur, p);
+	cur = new_token(TK_NUM, cur, p, 0);
       cur->val = strtol(p, &p, 10);
       continue;
     }
     error_at(p, "トークナイズできません");
   }
 
-  new_token(TK_EOF, cur, p);
+  new_token(TK_EOF, cur, p, 0);
   return head.next;
 }
 
@@ -149,7 +149,7 @@ Node *unary();
 Node *primary();
 
 Node *expr() {
-    return add();
+  return add();
 }
 
 Node *add() {
@@ -248,6 +248,5 @@ int main(int argc, char **argv) {
 
   printf("  pop rax\n");
   printf("  ret\n");
-  return 0;
   return 0;
 }
