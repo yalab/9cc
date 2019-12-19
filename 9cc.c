@@ -28,6 +28,7 @@ typedef enum {
   ND_SUB,
   ND_MUL,
   ND_DIV,
+  ND_CMP,
   ND_NUM
 } NodeKind;
 
@@ -115,8 +116,14 @@ Token *tokenize() {
       continue;
     }
 
+    if (strncmp(p, "==", 2) == 0) {
+      cur = new_token(TK_RESERVED, cur, p, 2);
+      p += 2;
+      continue;
+    }
+
     if (isdigit(*p)) {
-	cur = new_token(TK_NUM, cur, p, 0);
+      cur = new_token(TK_NUM, cur, p, 0);
       cur->val = strtol(p, &p, 10);
       continue;
     }
@@ -143,13 +150,23 @@ Node *new_node_num(int val) {
 }
 
 Node *expr();
+Node *relational();
 Node *add();
 Node *mul();
 Node *unary();
 Node *primary();
 
 Node *expr() {
-  return add();
+    return relational();
+}
+
+Node *relational() {
+  Node* node = add();
+  if (consume("==")) {
+    node = new_node(ND_CMP, node, add());
+  } else {
+    return node;
+  }
 }
 
 Node *add() {
@@ -224,6 +241,11 @@ void gen(Node *node) {
   case ND_DIV:
     printf("  cqo\n");
     printf("  idiv rdi\n");
+    break;
+  case ND_CMP:
+    printf("  cmp rax, rdi\n");
+    printf("  sete al\n");
+    printf("  movzb rax, al\n");
     break;
   }
 
