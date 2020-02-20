@@ -1,9 +1,12 @@
-CFLAGS = -std=c11 -g -static
-CC = gcc
+CC=gcc
+CFLAGS=-std=c11 -g -static
+SRCS=$(wildcard *.c)
+OBJS=$(SRCS:.c=.o)
 
-bin = test1
+9cc: $(OBJS)
+	$(CC) -o 9cc $(OBJS) $(LDFLAGS)
 
-9cc: 9cc.c
+$(OBJS): 9cc.h
 
 test: 9cc
 	./test.sh
