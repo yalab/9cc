@@ -79,7 +79,7 @@ Token *tokenize() {
       continue;
     }
 
-    if (strncmp(p, "==", 2) == 0) {
+    if (strncmp(p, "==", 2) == 0 || strncmp(p, "!=", 2) == 0) {
       cur = new_token(TK_RESERVED, cur, p, 2);
       p += 2;
       continue;
@@ -120,6 +120,8 @@ Node *equality() {
   Node* node = add();
   if (consume("==")) {
     node = new_node(ND_EQ, node, add());
+  } else if (consume("!=")) {
+    node = new_node(ND_NE, node, add());
   } else {
     return node;
   }

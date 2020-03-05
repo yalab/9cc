@@ -22,6 +22,7 @@ typedef enum {
   ND_MUL,
   ND_DIV,
   ND_EQ,
+  ND_NE,
   ND_NUM
 } NodeKind;
 
