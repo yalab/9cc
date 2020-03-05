@@ -119,7 +119,7 @@ Node *expr() {
 Node *equality() {
   Node* node = add();
   if (consume("==")) {
-    node = new_node(ND_CMP, node, add());
+    node = new_node(ND_EQ, node, add());
   } else {
     return node;
   }
