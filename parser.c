@@ -113,10 +113,10 @@ Node *new_node_num(int val) {
 }
 
 Node *expr() {
-    return relational();
+    return equality();
 }
 
-Node *relational() {
+Node *equality() {
   Node* node = add();
   if (consume("==")) {
     node = new_node(ND_CMP, node, add());

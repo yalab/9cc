@@ -37,7 +37,7 @@ struct Node {
 char* user_input;
 
 Node *expr();
-Node *relational();
+Node *equality();
 Node *add();
 Node *mul();
 Node *unary();
