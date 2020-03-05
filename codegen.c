@@ -37,7 +37,7 @@ void gen(Node *node) {
     printf("  setne al\n");
     printf("  movzb rax, al\n");
     break;
-  case ND_GT:
+  case ND_CMP:
     printf("  cmp rdi, rax\n");
     printf("  setl al\n");
     printf("  movzb rax, al\n");

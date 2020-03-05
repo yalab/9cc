@@ -74,7 +74,7 @@ Token *tokenize() {
       continue;
     }
 
-    if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' || *p == ')' || *p == '>') {
+    if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' || *p == ')' || *p == '>' || *p == '<') {
       cur = new_token(TK_RESERVED, cur, p++, 1);
       continue;
     }
@@ -130,7 +130,9 @@ Node *equality() {
 Node *relational() {
   Node* node = add();
   if (consume(">")) {
-    node = new_node(ND_GT, node, add());
+    node = new_node(ND_CMP, node, add());
+  } else if (consume("<")) {
+    node = new_node(ND_CMP, add(), node);
   } else {
     return node;
   }
