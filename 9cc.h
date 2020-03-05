@@ -23,6 +23,7 @@ typedef enum {
   ND_DIV,
   ND_EQ,
   ND_NE,
+  ND_GT,
   ND_NUM
 } NodeKind;
 
@@ -39,6 +40,7 @@ char* user_input;
 
 Node *expr();
 Node *equality();
+Node *relational();
 Node *add();
 Node *mul();
 Node *unary();
